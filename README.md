@@ -46,7 +46,7 @@ Method: POST<br />
 &emsp;response_format(url|bytes|stream)(default url)<br /> 
 &emsp;speaker(any speaker you have configured or raw)(default is first speaker configured)<br />
 &ensp;Extra params V1:<br /> 
-&emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
+&emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')<br />
 &ensp;Extra params V2:<br /> 
 &emsp;accent<br />
 
