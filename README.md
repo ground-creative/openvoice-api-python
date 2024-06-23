@@ -7,14 +7,14 @@ https://github.com/myshell-ai/OpenVoice/tree/main
 
 1) Clone the repository
 ```
-git clone https://github.com/ground-creative/docker-scripts-runner
+git clone https://github.com/ground-creative/openvoice-api-python.git
 ```
 
 2) Change environment variables in env.sample file and rename it to .env
 
 # Docker
 
-https://github.com/ground-creative/docker-scripts-runner
+__ADD_DOCKER_CONTAINER_URL__
 
 ## Usage
 
@@ -24,7 +24,7 @@ python app.py
 
 ## Examples
 
-Look in example folder
+Look inside example folder
 
 ## Unit Testing
 
