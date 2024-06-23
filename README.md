@@ -1,6 +1,6 @@
 # OPENVOICE API
 
-An api engine for openvoice
+An api engine for openvoice that uses flask\n
 https://github.com/myshell-ai/OpenVoice/tree/main
 
 ## Installation
