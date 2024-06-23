@@ -39,15 +39,15 @@ python3 app.py
 - Generate an audio wav file<br />
 Method: POST<br />
 &ensp;Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
-&ensp;Params:<br />
+Params:<br />
 &emsp;language(default 0),<br />
 &emsp;speed(default 1.0),<br /> 
 &emsp;text(required)<br /> 
 &emsp;response_format(url|bytes|stream)(default url)<br /> 
 &emsp;speaker(any speaker you have configured or raw)(default is first speaker configured)<br />
-&ensp;Extra params V1:<br /> 
+Extra params V1:<br /> 
 &emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')<br />
-&ensp;Extra params V2:<br /> 
+Extra params V2:<br /> 
 &emsp;accent<br />
 
 Description: Retrieve a generate audio url<br />
