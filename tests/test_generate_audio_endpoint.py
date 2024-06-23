@@ -153,6 +153,30 @@ class TestV1(IsolatedAsyncioTestCase):
             self.assertTrue(os.path.exists(out_file), f"File {out_file} does not exist.")
             #print(f'Audio file saved as {out_file}')
 
+    async def test_raw_speaker_param(self):
+        out_file = 'outputs/test_raw_speaker_param_v1.wav'
+        if os.path.exists(out_file):
+            os.remove(out_file)
+        payload = {
+            'language': 'en',
+            'text': 'Let me know how you feel, we might just have a deal.',
+            'speed': 1.0,
+            'response_format': 'url',
+            'speaker': 'raw'
+        }
+        async with self.client as c:
+            response = await c.post('/generate-audio/v1/', json=payload)
+            self.assertEqual(response.status_code, 200)
+            response_data = await response.get_json()
+            file_url = response_data['data']['url']
+            response = await c.get(file_url)
+            self.assertEqual(response.status_code, 200)
+            response_data = await response.get_data()
+            with open(out_file, 'wb') as audio_file:
+                audio_file.write(response_data)
+            self.assertTrue(os.path.exists(out_file), f"File {out_file} does not exist.")
+            #print(f'Audio file saved as {out_file}')
+
     async def test_params_errors(self):
         # Required text error
         payload = {}
@@ -329,6 +353,30 @@ class TestV2(IsolatedAsyncioTestCase):
             'text': 'En veramo, las olas son mas fuertes.',
             'speed': 1.0,
             'response_format': 'url',
+        }
+        async with self.client as c:
+            response = await c.post('/generate-audio/v2/', json=payload)
+            self.assertEqual(response.status_code, 200)
+            response_data = await response.get_json()
+            file_url = response_data['data']['url']
+            response = await c.get(file_url)
+            self.assertEqual(response.status_code, 200)
+            response_data = await response.get_data()
+            with open(out_file, 'wb') as audio_file:
+                audio_file.write(response_data)
+            self.assertTrue(os.path.exists(out_file), f"File {out_file} does not exist.")
+            #print(f'Audio file saved as {out_file}')
+
+    async def test_raw_speaker_param(self):
+        out_file = 'outputs/test_raw_speaker_param_v2.wav'
+        if os.path.exists(out_file):
+            os.remove(out_file)
+        payload = {
+            'language': 'en',
+            'text': 'Let me know how you feel, we might just have a deal.',
+            'speed': 1.0,
+            'response_format': 'url',
+            'speaker': 'raw'
         }
         async with self.client as c:
             response = await c.post('/generate-audio/v2/', json=payload)

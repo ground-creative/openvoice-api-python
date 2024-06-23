@@ -196,8 +196,8 @@ async def generate_audio(version):
         if version == 'v1':
             speaker = args.get('speaker', SPEAKERS[0]).lower()
             
-            if speaker not in SPEAKERS:
-                joined_keys = ' '.join(SPEAKERS)
+            if speaker not in SPEAKERS and speaker != 'raw':
+                joined_keys = ' '.join(SPEAKERS) + ", raw"
                 error_message = f"Invalid speaker '{speaker}', valid values are: " + joined_keys
                 app.logger.error(error_message)
                 return jsonify(data={"message": error_message}), 400
@@ -222,7 +222,9 @@ async def generate_audio(version):
             source_se = torch.load(f'{ckpt_base[language]}/{raw_lang}_default_se.pth').to(DEVICE_V1)
             app.logger.info(f' > Converting text to audio...')
             base_speaker_tts[language].tts(text, output_path, speaker=style, language=MODEL_LANGUAGES_NAMES_V1[language], speed=speed)
+            
             if speaker != 'raw':
+                app.logger.info(f' > Adding v1 color converter...')
                 output_filename = generate_random_filename('', 'wav')
                 save_path = f'{AUDIO_FILES_PATH}/{output_filename}'
                 target_se = targets_v1[speaker]
@@ -260,8 +262,9 @@ async def generate_audio(version):
             source_se = torch.load(f'{OPENVOICE_PATH}/checkpoints_v2/base_speakers/ses/{final_speaker_key}.pth', map_location=DEVICE_V2)
             app.logger.info(f' > Converting text to audio...')
             models[language].tts_to_file(text, speaker_id, output_path, speed=speed)
-            
+
             if speaker != 'raw':
+                app.logger.info(f' > Adding v2 color converter...')
                 output_filename = generate_random_filename('', 'wav')
                 save_path = f'{AUDIO_FILES_PATH}/{output_filename}'
                 target_se = targets_v2[speaker]
