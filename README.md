@@ -30,7 +30,9 @@ Look inside example folder
 
 ```
 cd tests
-python -m unittest
+python -m unittest __FILE__
+# or
+python -m unittest __FILE__.CLASS__
 # or
 python -m unittest __FILE__.CLASS__.FUNCTION__
 ```
