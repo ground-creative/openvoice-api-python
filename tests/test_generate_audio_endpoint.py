@@ -15,6 +15,7 @@ os.environ['SPEAKERS'] = os.getenv("SPEAKERS", "elon,rachel,kaiwen")
 os.environ['WATERMARK'] = os.getenv("WATERMARK", "@OpenVoiceAPI")
 os.environ['DEVICE_V1'] = os.getenv("DEVICE_V1", "cuda:0")
 os.environ['DEVICE_V2'] = os.getenv("DEVICE_V2", "cuda:0")
+os.environ['SUPPORTED_STYLES_V1'] = os.getenv("SUPPORTED_STYLES_V1", "English")
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
@@ -166,7 +167,7 @@ class TestV1(IsolatedAsyncioTestCase):
         async with self.client as c:
             response = await c.post('/generate-audio/v1/', json=payload)
             self.assertEqual(response.status_code, 400)
-        # Wrong response_format param error
+        # Wrong response_format value error
         payload = {
             'text': 'Let me know how you feel, we might just have a deal.',
             'response_format': 'invalid_value'
@@ -174,7 +175,7 @@ class TestV1(IsolatedAsyncioTestCase):
         async with self.client as c:
             response = await c.post('/generate-audio/v1/', json=payload)
             self.assertEqual(response.status_code, 400)
-        # Wrong language param error
+        # Wrong language value error
         payload = {
             'language': 'invalid_value',
             'text': 'Let me know how you feel, we might just have a deal.'
@@ -183,7 +184,7 @@ class TestV1(IsolatedAsyncioTestCase):
             response = await c.post('/generate-audio/v1/', json=payload)
             response_data = await response.get_json()
             self.assertEqual(response.status_code, 400)
-        # Wrong speaker param error
+        # Wrong speaker value error
         payload = {
             'speaker': 'invalid_value',
             'text': 'Let me know how you feel, we might just have a deal.'
@@ -191,8 +192,18 @@ class TestV1(IsolatedAsyncioTestCase):
         async with self.client as c:
             response = await c.post('/generate-audio/v1/', json=payload)
             self.assertEqual(response.status_code, 400)
-        # Wrong style param error
+        # Wrong style value error
         payload = {
+            'style': 'invalid_value',
+            'text': 'Let me know how you feel, we might just have a deal.'
+        }
+        async with self.client as c:
+            response = await c.post('/generate-audio/v1/', json=payload)
+            self.assertEqual(response.status_code, 400)
+        # Language does not support style param error
+        payload = {
+            'language': 'zh',
+            'text': '今天天气真好，我们一起出去吃饭吧。',
             'style': 'invalid_value',
             'text': 'Let me know how you feel, we might just have a deal.'
         }

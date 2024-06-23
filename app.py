@@ -20,6 +20,7 @@ SPEAKERS = os.getenv("SPEAKERS", "elon,rachel,kaiwen").split(",")
 WATERMARK = os.getenv("WATERMARK", "@OpenVoiceAPI")
 DEVICE_V1 = os.getenv("DEVICE_V1", "cuda:0")
 DEVICE_V2 = os.getenv("DEVICE_V2", "cuda:0")
+SUPPORTED_STYLES_V1 = os.getenv("SUPPORTED_STYLES_V1", "English").split(",")
 OPENVOICE_PATH = '/app/OpenVoice'
 BASE_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
@@ -159,7 +160,7 @@ async def generate_audio(version):
         valid_response_formats = ['url', 'bytes', 'stream']
         
         if response_format not in valid_response_formats:
-            error_message = f"Invalid response_format sent: {raw_response_format}. valid params are: {', '.join(valid_response_formats)}"
+            error_message = f"Invalid response_format sent '{raw_response_format}', valid params are: {', '.join(valid_response_formats)}"
             app.logger.error(error_message)
             return jsonify(data={"message": error_message}), 400
         
@@ -179,7 +180,7 @@ async def generate_audio(version):
                 valid_lang_keys = ", ".join(MODEL_LANGUAGES_V2).lower()
             else:
                 return jsonify(data={"message": f"Version {version} not supported"}), 500
-            error_message = f"Invalid language key, valid values are: " + valid_lang_keys
+            error_message = f"Invalid language key '{raw_lang}', valid values are: " + valid_lang_keys
             app.logger.error(error_message)
             return jsonify(data={"message": error_message}), 400
 
@@ -201,6 +202,12 @@ async def generate_audio(version):
                 return jsonify(data={"message": error_message}), 400
            
             style = args.get('style', 'default').lower()
+
+            if style != 'default' and MODEL_LANGUAGES_NAMES_V1[language] not in SUPPORTED_STYLES_V1:
+                joined_keys = ' '.join(STYLES_V1)
+                error_message = f"Param 'style' is not supported for language '{raw_lang}'"
+                app.logger.error(error_message)
+                return jsonify(data={"message": error_message}), 400
             
             if style not in STYLES_V1:
                 joined_keys = ' '.join(STYLES_V1)
