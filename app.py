@@ -214,16 +214,17 @@ async def generate_audio(version):
             source_se = torch.load(f'{ckpt_base[language]}/{raw_lang}_default_se.pth').to(DEVICE_V1)
             app.logger.info(f' > Converting text to audio...')
             base_speaker_tts[language].tts(text, output_path, speaker=style, language=MODEL_LANGUAGES_NAMES_V1[language], speed=speed)
-            output_filename = generate_random_filename('', 'wav')
-            save_path = f'{AUDIO_FILES_PATH}/{output_filename}'
-            target_se = targets_v1[speaker]
-            tone_color_converter_v1.convert(
-            audio_src_path=output_path, 
-                src_se=source_se, 
-                tgt_se=target_se, 
-                output_path=save_path,
-                message=WATERMARK)
-            output_path = save_path
+            if speaker != 'raw':
+                output_filename = generate_random_filename('', 'wav')
+                save_path = f'{AUDIO_FILES_PATH}/{output_filename}'
+                target_se = targets_v1[speaker]
+                tone_color_converter_v1.convert(
+                audio_src_path=output_path, 
+                    src_se=source_se, 
+                    tgt_se=target_se, 
+                    output_path=save_path,
+                    message=WATERMARK)
+                output_path = save_path
 
         elif version == 'v2':    
             default_speaker_key = list(speaker_ids[language].keys())[-1].lower()
