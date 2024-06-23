@@ -8,7 +8,7 @@ https://github.com/myshell-ai/OpenVoice/tree/main
 http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
 Description: Generate an audio wav file<br />
 Method: POST <br />
-Params: language(default 0), speed(default 1.0), text(required), response_format(url|bytes|stream)(default url), speaker(any speaker you have configured)(default is first speaker configured)<br />
+Params: language(default 0), speed(default 1.0), text(required),<br /> response_format(url|bytes|stream)(default url), speaker(any speaker you have configured)(default is first speaker configured)<br />
 Extra params V1: style('default', 'whispering', 'shouting', 'excited', 'cheerful', 'terrified', 'angry', 'sad', 'friendly')
 Extra params V2: accent<br />
 
@@ -22,6 +22,7 @@ Params: stream(true|false)(default false)
 
 ### Docker
 
+Follow instructions here to install with docker<br /> 
 https://github.com/ground-creative/openvoice-docker
 
 ### Stand Alone Installation
