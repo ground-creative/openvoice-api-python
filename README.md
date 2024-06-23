@@ -24,7 +24,7 @@ python app.py
 
 ## Examples
 
-Look inside example folder
+Look inside examples folder
 
 ## Unit Testing
 
