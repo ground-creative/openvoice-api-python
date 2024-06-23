@@ -51,7 +51,7 @@ Extra params V2: accent (default: default language)<br />
 
 - Retrieve a previously generated audio url<br />
 Method: GET<br />
-Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}'/audio-file/{FILENAME}<br />
+Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/audio-file/{FILENAME}<br />
 Params: stream(true|false)(default: false)
 
 ## Examples
