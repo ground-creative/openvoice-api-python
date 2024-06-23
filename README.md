@@ -3,28 +3,6 @@
 An api engine for openvoice written in python<br />
 https://github.com/myshell-ai/OpenVoice/tree/main
 
-## Services
-
-Description: Generate an audio wav file<br />
-Method: POST <br />
-Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
-Params:<br />
-&emsp;language(default 0)<br />
-&emsp;speed(default 1.0), text(required)<br /> 
-&emsp;response_format(url|bytes|stream)(default url)<br /> 
-&emsp;speaker(any speaker you have configured)(default is first speaker configured)<br />
-Extra params V1:<br /> 
-&emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
-Extra params V2:<br /> 
-&emsp;accent<br />
-
-Description: Retrieve a generate audio url<br />
-Method: GET<br />
-Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}'/audio-file/{FILENAME}<br />
-Params:<br /> 
-&emsp;stream(true|false)(default false)
-
-
 ## Installation
 
 ### Docker
@@ -56,6 +34,27 @@ pip install -r requirements.txt  # if you have a requirements file
 # Run the server
 python3 app.py
 ```
+
+## Services
+
+Description: Generate an audio wav file<br />
+Method: POST <br />
+Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
+Params:<br />
+&emsp;language(default 0)<br />
+&emsp;speed(default 1.0), text(required)<br /> 
+&emsp;response_format(url|bytes|stream)(default url)<br /> 
+&emsp;speaker(any speaker you have configured)(default is first speaker configured)<br />
+Extra params V1:<br /> 
+&emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
+Extra params V2:<br /> 
+&emsp;accent<br />
+
+Description: Retrieve a generate audio url<br />
+Method: GET<br />
+Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}'/audio-file/{FILENAME}<br />
+Params:<br /> 
+&emsp;stream(true|false)(default false)
 
 ## Examples
 
