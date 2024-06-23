@@ -36,8 +36,8 @@ python3 app.py
 ```
 
 ## Services
-- Generate an audio wav file
-&ensp;Method: POST <br />
+- Generate an audio wav file<br />
+Method: POST<br />
 &ensp;Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
 &ensp;Params:<br />
 &emsp;language(default 0),<br />
