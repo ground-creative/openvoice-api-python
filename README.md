@@ -9,10 +9,10 @@ http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
 Description: Generate an audio wav file<br />
 Method: POST <br />
 Params:<br />
-\tlanguage(default 0)<br />
-    speed(default 1.0), text(required)<br /> 
-    response_format(url|bytes|stream)(default url)<br /> 
-    speaker(any speaker you have configured)(default is first speaker configured)<br />
+&emsp;language(default 0)<br />
+&emsp;speed(default 1.0), text(required)<br /> 
+&emsp;response_format(url|bytes|stream)(default url)<br /> 
+&emsp;speaker(any speaker you have configured)(default is first speaker configured)<br />
 
 Extra params V1:<br /> 
     style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
