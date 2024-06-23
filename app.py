@@ -169,10 +169,10 @@ async def generate_audio(version):
             app.logger.error(error_message)
             return jsonify(data={"message": error_message}), 400
         
-        raw_lang = args.get('language', 'en')
+        raw_lang = args.get('language', '__REQUIRED_PARAM__')
         language = raw_lang.upper()
         
-        if language not in models:
+        if language == '__REQUIRED_PARAM__' or language not in models:
 
             if version == 'v1':
                 valid_lang_keys = ", ".join(MODEL_LANGUAGES_CODES_V1).lower()
@@ -180,6 +180,7 @@ async def generate_audio(version):
                 valid_lang_keys = ", ".join(MODEL_LANGUAGES_V2).lower()
             else:
                 return jsonify(data={"message": f"Version {version} not supported"}), 500
+            
             error_message = f"Invalid language key '{raw_lang}', valid values are: " + valid_lang_keys
             app.logger.error(error_message)
             return jsonify(data={"message": error_message}), 400
