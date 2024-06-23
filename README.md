@@ -44,7 +44,7 @@ Params:<br />
 &emsp;language(default 0)<br />
 &emsp;speed(default 1.0), text(required)<br /> 
 &emsp;response_format(url|bytes|stream)(default url)<br /> 
-&emsp;speaker(any speaker you have configured)(default is first speaker configured)<br />
+&emsp;speaker(any speaker you have configured or raw)(default is first speaker configured)<br />
 Extra params V1:<br /> 
 &emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
 Extra params V2:<br /> 
