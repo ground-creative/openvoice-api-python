@@ -49,7 +49,7 @@ Extra params V1:<br />
 &emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')<br />
 Extra params V2: accent (default: default language)<br />
 
-- Retrieve a generate audio url<br />
+- Retrieve a previously generated audio url<br />
 Method: GET<br />
 Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}'/audio-file/{FILENAME}<br />
 Params: stream(true|false)(default: false)
