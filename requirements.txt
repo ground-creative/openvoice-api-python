@@ -1,0 +1,5 @@
+colorlog==6.8.2
+quart==0.19.6
+quart_cors==0.7.0
+aiofile==3.8.8
+python-dotenv==1.0.1
