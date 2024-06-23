@@ -29,7 +29,7 @@ python3 -m venv myenv  # Use python on Windows
 source myenv/bin/activate  # Use myenv\Scripts\activate on Windows
 
 # Now your venv is activated, and you can install packages
-pip install -r requirements.txt  # if you have a requirements file
+pip install -r requirements.txt  # install dependencies
 
 # Run the server
 python3 app.py
