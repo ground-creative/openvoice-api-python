@@ -15,14 +15,15 @@ Params:<br />
 &emsp;speaker(any speaker you have configured)(default is first speaker configured)<br />
 
 Extra params V1:<br /> 
-    style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
+&emsp;style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
 Extra params V2:<br /> 
-    accent<br />
+&emsp;accent<br />
 
 http(s):://{SERVER_ADDRESS}:{SERVER_PORT}'/audio-file/{FILENAME}<br />
 Description: Retrieve a generate audio url<br />
 Method: GET<br />
-Params: stream(true|false)(default false)
+Params:<br /> 
+&emsp;stream(true|false)(default false)
 
 
 ## Installation
