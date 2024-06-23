@@ -5,16 +5,16 @@ https://github.com/myshell-ai/OpenVoice/tree/main
 
 ## Services
 
-http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/
-Description: Generate an audio wav file
-Method: POST 
-Params: language(default 0), speed(default 1.0), text(required), response_format(url|bytes|stream)(default url), speaker(any speaker you have configured)(default is first speaker configured)
+http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
+Description: Generate an audio wav file<br />
+Method: POST <br />
+Params: language(default 0), speed(default 1.0), text(required), response_format(url|bytes|stream)(default url), speaker(any speaker you have configured)(default is first speaker configured)<br />
 Extra params V1: style('default', 'whispering', 'shouting', 'excited', 'cheerful', 'terrified', 'angry', 'sad', 'friendly')
-Extra params V2: accent
+Extra params V2: accent<br />
 
-http(s):://{SERVER_ADDRESS}:{SERVER_PORT}'/audio-file/{FILENAME}}'
-Description: Retrieve a generate audio url
-Method: GET
+http(s):://{SERVER_ADDRESS}:{SERVER_PORT}'/audio-file/{FILENAME}<br />
+Description: Retrieve a generate audio url<br />
+Method: GET<br />
 Params: stream(true|false)(default false)
 
 
