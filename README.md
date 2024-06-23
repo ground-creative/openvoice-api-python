@@ -37,12 +37,12 @@ python3 app.py
 
 ## Services
 - Generate an audio wav file
-&ensp;Description: Generate an audio wav file<br />
 &ensp;Method: POST <br />
 &ensp;Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}/<br />
 &ensp;Params:<br />
-&emsp;language(default 0)<br />
-&emsp;speed(default 1.0), text(required)<br /> 
+&emsp;language(default 0),<br />
+&emsp;speed(default 1.0),<br /> 
+&emsp;text(required)<br /> 
 &emsp;response_format(url|bytes|stream)(default url)<br /> 
 &emsp;speaker(any speaker you have configured or raw)(default is first speaker configured)<br />
 &ensp;Extra params V1:<br /> 
