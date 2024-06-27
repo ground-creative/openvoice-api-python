@@ -1,4 +1,4 @@
-import logging, colorlog, os, torch, traceback
+import logging, colorlog, os, torch, traceback, base64
 from quart import Quart, jsonify, request, redirect, send_file, Response, stream_with_context
 from quart_cors import cors
 from openvoice import se_extractor
@@ -26,10 +26,11 @@ BASE_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
 MODEL_LANGUAGES_CODES_V1 = []
 MODEL_LANGUAGES_NAMES_V1 = {}
-for item in MODEL_LANGUAGES_V1:
-    code, name = item.split(":")
-    MODEL_LANGUAGES_CODES_V1.append(code)
-    MODEL_LANGUAGES_NAMES_V1[code] = name
+if MODEL_LANGUAGES_V1 and any(MODEL_LANGUAGES_V1): 
+    for item in MODEL_LANGUAGES_V1:
+        code, name = item.split(":")
+        MODEL_LANGUAGES_CODES_V1.append(code)
+        MODEL_LANGUAGES_NAMES_V1[code] = name
 
 STYLES_V1 = ['default', 'whispering', 'shouting', 'excited', 'cheerful', 'terrified', 'angry', 'sad', 'friendly']
 
@@ -117,8 +118,8 @@ def generate_random_filename(prefix='', ext='wav'):
 @app.before_request
 def log_request_info():
     logger.debug(f"Started processing {request.method} request from {request.remote_addr} => {request.url}")
-    if not request.path.endswith('/') and request.path != '/' and not request.path.startswith('/audio-file/'):
-        return redirect(f"{request.url}/", code=301)
+    #if not request.path.endswith('/') and request.path != '/' and not request.path.startswith('/audio-file/'):
+    #    return redirect(f"{request.url}/", code=301)
     
 @app.teardown_request
 def log_teardown(exception=None):
@@ -130,13 +131,191 @@ def log_teardown(exception=None):
 def home():
     return jsonify(data={"message": "OpenVoice API"})
 
-@app.route('/generate-audio/<version>/', methods=['POST'])
+@app.route('/<version>/audio/speech', methods=['POST'])
+async def generate_speech(version):
+
+    try:
+        json_data = await request.get_json()
+        print("Received JSON body:")
+        print(json_data)
+    except Exception as e:
+        print(f"Error parsing JSON: {str(e)}")
+        json_data = None
+
+    if version not in ["v1", "v2"]:
+        return jsonify({"error": "Invalid version"}), 400
+    
+    VALID_PARAMS = ['model', 'speed', 'input', "response_format", "voice"]
+
+    if version == 'v1':
+
+        if 'ckpt_base' not in globals():
+            return jsonify(data={"message": 'version 1 module is not loaded'}), 500
+        
+        VALID_PARAMS.append('style')
+        
+    elif version == 'v2':
+
+        if 'models' not in globals():
+            return jsonify(data={"message": 'version 2 module is not loaded'}), 500
+        
+        VALID_PARAMS.append('accent')
+
+    try:
+        args = await request.get_json()
+        invalid_params = [param for param in args if param not in VALID_PARAMS]
+        raw_response_format = args.get('response_format', 'wav')
+        response_format = raw_response_format.lower()
+        valid_response_formats = ['wav']
+        
+        if response_format not in valid_response_formats:
+            error_message = f"Invalid response_format sent '{raw_response_format}', valid params are: {', '.join(valid_response_formats)}"
+            app.logger.error(error_message)
+            return jsonify(data={"message": error_message}), 400
+        
+        media_type = f"audio/{response_format}"
+        
+        if invalid_params:
+            error_message = f"Invalid parameter(s) sent: {', '.join(invalid_params)}. valid params are: {', '.join(VALID_PARAMS)}"
+            app.logger.error(error_message)
+            return jsonify(data={"message": error_message}), 400
+        
+        raw_lang = args.get('model', '__REQUIRED_PARAM__')
+        language = raw_lang.upper()
+        
+        if language == '__REQUIRED_PARAM__' or language not in models:
+
+            if version == 'v1':
+                valid_lang_keys = ", ".join(MODEL_LANGUAGES_CODES_V1).lower()
+            elif version == 'v2':
+                valid_lang_keys = ", ".join(MODEL_LANGUAGES_V2).lower()
+            else:
+                return jsonify(data={"message": f"Version {version} not supported"}), 500
+            
+            error_message = f"Invalid model '{raw_lang}', valid values are: " + valid_lang_keys
+            app.logger.error(error_message)
+            return jsonify(data={"message": error_message}), 400
+
+        speed = float(args.get('speed', 1.0))
+        text = args.get('input')
+
+        if text is None or text == '':
+            error_message = "Parameter 'input' is required"
+            app.logger.error(error_message)
+            return jsonify(data={"message": error_message}), 400
+
+        if version == 'v1':
+            speaker = args.get('speaker', SPEAKERS[0]).lower()
+            
+            if speaker not in SPEAKERS and speaker != 'raw':
+                joined_keys = ' '.join(SPEAKERS) + ", raw"
+                error_message = f"Invalid speaker '{speaker}', valid values are: " + joined_keys
+                app.logger.error(error_message)
+                return jsonify(data={"message": error_message}), 400
+           
+            style = args.get('style', 'default').lower()
+
+            if style != 'default' and MODEL_LANGUAGES_NAMES_V1[language] not in SUPPORTED_STYLES_V1:
+                joined_keys = ' '.join(STYLES_V1)
+                error_message = f"Param 'style' is not supported for language '{raw_lang}'"
+                app.logger.error(error_message)
+                return jsonify(data={"message": error_message}), 400
+            
+            if style not in STYLES_V1:
+                joined_keys = ' '.join(STYLES_V1)
+                error_message = f"Invalid style '{style}', valid values are: " + joined_keys
+                app.logger.error(error_message)
+                return jsonify(data={"message": error_message}), 400
+
+            output_filename = generate_random_filename('', 'wav')
+            output_path = f'{AUDIO_FILES_PATH}/{output_filename}' 
+            app.logger.info(f' > Loading speaker v1 model for {speaker}...')
+            source_se = torch.load(f'{ckpt_base[language]}/{raw_lang}_default_se.pth').to(DEVICE_V1)
+            app.logger.info(f' > Converting text to audio...')
+            base_speaker_tts[language].tts(text, output_path, speaker=style, language=MODEL_LANGUAGES_NAMES_V1[language], speed=speed)
+            
+            if speaker != 'raw':
+                app.logger.info(f' > Adding v1 color converter...')
+                output_filename = generate_random_filename('', 'wav')
+                save_path = f'{AUDIO_FILES_PATH}/{output_filename}'
+                target_se = targets_v1[speaker]
+                tone_color_converter_v1.convert(
+                audio_src_path=output_path, 
+                    src_se=source_se, 
+                    tgt_se=target_se, 
+                    output_path=save_path,
+                    message=WATERMARK)
+                output_path = save_path
+   
+        elif version == 'v2':    
+            default_speaker_key = list(speaker_ids[language].keys())[-1].lower()
+            speaker_key = args.get('accent', default_speaker_key).lower()
+            format_speaker_key = 'EN-Default' if speaker_key == 'en-default' else speaker_key.upper()
+            final_speaker_key = speaker_key.replace('_', '-')
+            
+            if format_speaker_key not in speaker_ids[language]:
+                joined_keys = ', '.join([key.lower() for key in speaker_ids[language].keys()])
+                error_message = f"Invalid accent '{speaker_key}', valid values are: " + joined_keys
+                app.logger.error(error_message)
+                return jsonify(data={"message": error_message}), 400
+            
+            speaker_id = speaker_ids[language][format_speaker_key]
+            speaker = args.get('voice', SPEAKERS[0]).lower()
+
+            if speaker not in reference_speakers and speaker != 'raw':
+                error_message = f"Invalid voice '{speaker}', valid values are: " + ", ".join(reference_speakers) + ", raw"
+                app.logger.error(error_message)
+                return jsonify(data={"message": error_message}), 400
+
+            output_filename = generate_random_filename('', 'wav')
+            output_path = f'{AUDIO_FILES_PATH}/{output_filename}' 
+            app.logger.info(f' > Loading speaker v2 model for {final_speaker_key}...')
+            source_se = torch.load(f'{OPENVOICE_PATH}/checkpoints_v2/base_speakers/ses/{final_speaker_key}.pth', map_location=DEVICE_V2)
+            app.logger.info(f' > Converting text to audio...')
+            models[language].tts_to_file(text, speaker_id, output_path, speed=speed)
+
+            if speaker != 'raw':
+                app.logger.info(f' > Adding v2 color converter...')
+                output_filename = generate_random_filename('', 'wav')
+                save_path = f'{AUDIO_FILES_PATH}/{output_filename}'
+                target_se = targets_v2[speaker]
+                try:
+                    app.logger.info(f'  > Saving final file in {save_path}')
+                    tone_color_converter_v2.convert(
+                        audio_src_path=output_path, 
+                        src_se=source_se, 
+                        tgt_se=target_se, 
+                        output_path=save_path,
+                        message=WATERMARK)
+                    output_path = save_path
+                    
+                except Exception as e:
+                    app.logger.error(f'Error: {str(e)}')
+                    return jsonify(data={"message": "Internal Server Error"}), 500
+        else:
+            return jsonify(data={"message": f"Version {version} not supported"}), 500
+        
+        #return await send_file(output_path, mimetype=media_type)
+        async def generate():
+            with open(output_path, "rb") as fwav:
+                data = fwav.read(1024)
+                while data:
+                    yield data
+                    data = fwav.read(1024)                         
+        return Response(generate(), mimetype=media_type)
+        
+    except Exception as e:
+        app.logger.error(f'Error: {str(e)}')
+        app.logger.error(traceback.format_exc())
+        return jsonify(data={"message": "Internal Server Error"}), 500
+
+@app.route('/generate-audio', methods=['POST'])
 async def generate_audio(version):
 
     if version not in ["v1", "v2"]:
         return jsonify({"error": "Invalid version"}), 400
     
-    VALID_PARAMS = ['language', 'speed', 'text', "response_format", "speaker"]
+    VALID_PARAMS = ['language', 'speed', 'text', "response_format", "speaker", 'encode']
 
     if version == 'v1':
 
@@ -194,7 +373,7 @@ async def generate_audio(version):
             return jsonify(data={"message": error_message}), 400
 
         if version == 'v1':
-            speaker = args.get('speaker', SPEAKERS[0]).lower()
+            speaker = args.get('voice', SPEAKERS[0]).lower()
             
             if speaker not in SPEAKERS and speaker != 'raw':
                 joined_keys = ' '.join(SPEAKERS) + ", raw"
@@ -292,6 +471,10 @@ async def generate_audio(version):
         elif response_format == 'bytes':
             with open(output_path, 'rb') as audio_file:
                 audio_bytes = audio_file.read()
+            encode = args.get('encode', False)
+            if (encode == True):
+                audio_base64 = base64.b64encode(audio_bytes).decode('utf-8')
+                audio_bytes = audio_base64
             return Response(audio_bytes, mimetype='audio/wav')
         elif response_format == 'stream':
             async def generate():
