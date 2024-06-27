@@ -6,6 +6,9 @@ https://github.com/myshell-ai/OpenVoice/tree/main
 API Client<br />
 https://github.com/ground-creative/openvoice-api-client-python
 
+OpenAI sdk is example<br />
+https://github.com/ground-creative/openvoice-api-python/blob/main/examples/openai_lib_example.py
+
 ## Installation
 
 ### Docker
