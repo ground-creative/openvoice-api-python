@@ -20,6 +20,8 @@ https://github.com/ground-creative/openvoice-docker
 
 ### Stand Alone Installation
 
+You are going to need to include OpenVoice dependencies manually.
+
 1) Clone the repository
 ```
 git clone https://github.com/ground-creative/openvoice-api-python.git
@@ -30,13 +32,7 @@ git clone https://github.com/ground-creative/openvoice-api-python.git
 ## Usage
 
 ```
-# Step 1: Create the virtual environment
-python3 -m venv myenv  # Use python on Windows
-
-# Step 2: Activate the virtual environment
-source myenv/bin/activate  # Use myenv\Scripts\activate on Windows
-
-# Now your venv is activated, and you can install packages
+#  install packages
 pip install -r requirements.txt  # install dependencies
 
 # Run the server
