@@ -45,9 +45,9 @@ python3 app.py
 
 **Method:** POST
 
-** Endpoint:** `http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}`
+**Endpoint:** `http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}`
 
-** Params:**
+**Params:**
 - `model(required)` the model to use
 - `input(required)` the text to convert to speech
 - `speed(default: 1.0)` the speed of the voice
@@ -60,7 +60,7 @@ python3 app.py
 **Extra params V2:**
 - `accent(default: default language)` an accent for the voice
 
-- Retrieve a previously generated audio url<br />
+### Retrieve a previously generated audio url
 Method: GET<br />
 Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/audio-file/{FILENAME}<br />
 Params: stream(true|false)(default: false)
