@@ -48,17 +48,17 @@ python3 app.py
 ** Endpoint:** `http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}`
 
 ** Params:**
-- `model(required)` the model to use
-- `input(required)` the text to convert to speech
-- `speed(default: 1.0)` the speed of the voice
-- `response_format(url|bytes|base64|stream)(default: url)` the response format
-- `voice(default: raw)` the voice to use
+- `model`(required) the model to use
+- `input`(required) the text to convert to speech
+- `speed`(default: 1.0) the speed of the voice
+- `response_format`(url|bytes|base64|stream)(default: url) the response format
+- `voice`(default: raw) the voice to use
 
 **Extra params V1:** 
-- `style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')`
+- `style`('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')
 
 **Extra params V2:**
-- `accent(default: default language)` an accent for the voice
+- `accent`(default: default language) an accent for the voice
 
 - Retrieve a previously generated audio url<br />
 Method: GET<br />
