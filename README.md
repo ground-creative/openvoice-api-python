@@ -41,11 +41,11 @@ python3 app.py
 
 ## Services
 
-### Generate an audio file
+### 1. Generate an audio file
 
 **Method:** POST
 
-**Endpoint:** `/generate-audio/{VERSION}`
+**Endpoint:** `/{VERSION}/generate-audio`
 
 **Params:**
 - `model(required)` the model to use
@@ -60,7 +60,20 @@ python3 app.py
 **Extra params V2:**
 - `accent(default: default language)` an accent for the voice
 
-### Retrieve a previously generated audio url
+
+### 2. Change voice
+
+**Method:** POST
+
+**Endpoint:** `/{VERSION}/change-voice`
+
+**Params:**
+- `model(required)` the model to use
+- `audio_data(required)` base64 encoded audio data
+- `voice(required)` the voice to use
+- `response_format(url|bytes|base64|stream)(default: url)` the response format
+
+### 3. Retrieve a previously generated audio url
 
 **Method:** GET
 
