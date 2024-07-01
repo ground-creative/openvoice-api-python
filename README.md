@@ -41,11 +41,11 @@ python3 app.py
 
 ## Services
 
-### - Generate an audio file
+### Generate an audio file
 
 **Method:** POST
 
-**Endpoint:** `http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}`
+**Endpoint:** `/generate-audio/{VERSION}`
 
 **Params:**
 - `model(required)` the model to use
@@ -61,9 +61,12 @@ python3 app.py
 - `accent(default: default language)` an accent for the voice
 
 ### Retrieve a previously generated audio url
-Method: GET<br />
-Url: http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/audio-file/{FILENAME}<br />
-Params: stream(true|false)(default: false)
+
+**Method:** GET
+
+**Endpoint:** `/audio-file/{FILENAME}`
+**Params:** 
+- `stream(true|false)(default: false)`
 
 ## Examples
 
