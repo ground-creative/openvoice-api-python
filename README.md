@@ -41,7 +41,7 @@ python3 app.py
 
 ## Services
 
-### Generate an audio file
+### - Generate an audio file
 
 **Method:** POST
 
