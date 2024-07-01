@@ -55,7 +55,7 @@ python3 app.py
 - `voice(default: raw)` the voice to use
 
 **Extra params V1:** 
-- `style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')`
+- `style('default','whispering','shouting','excited','cheerful','terrified','angry','sad','friendly')` a style for the voice
 
 **Extra params V2:**
 - `accent(default: default language)` an accent for the voice
