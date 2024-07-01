@@ -4,3 +4,5 @@ quart_cors==0.7.0
 aiofile==3.8.8
 python-dotenv==1.0.1
 requests==2.31.0
+python-magic==0.4.27
+uvicorn==0.30.1

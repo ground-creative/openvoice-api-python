@@ -2,7 +2,7 @@ import requests, os
 
 SERVER_PORT = os.getenv("SERVER_PORT", 5000)
 
-output_file = 'outputs/generate_audio_url.wav'
+output_file = 'outputs/get_audio_file_bytes.wav'
 if os.path.exists(output_file):
     os.remove(output_file)
 
@@ -14,32 +14,32 @@ url = f'http://localhost:{SERVER_PORT}/{version}/generate-audio'
 # Define the parameters for the POST request
 payload = {
     'model': 'en',
-    'input': 'Hello, this is a test. I am here, there and everywhere. Let me know how you feel, perhaps this can be real.',
+    'input': 'Hello, this is a test. I am here, there and everywhere',
     'speed': 1.0,
-    'voice': 'elon',
-    'response_format': 'url',
+    'response_format': 'url'
+    #'voice': 'elon',
     #'style': 'excited' # v1 only
     #'accent': 'en-au' #v2 only
 }
 
 try:
     # Send the POST request to generate the audio
-    response = requests.post(url, json=payload, stream=False)
-    if response.status_code == 200:   
+    response = requests.post(url, json=payload)
+    if response.status_code == 200:
         response_data = response.json()
         file_url = response_data['result']['data']['url']
-        print(f'Generated url: {file_url}')
-        response = requests.get(file_url, stream=False)
+        response = requests.get(file_url)
         if response.status_code == 200:
+            # Save the received bytes as a .wav file
             with open(output_file, 'wb') as audio_file:
                 audio_file.write(response.content)
-            print(f'Audio file saved as {output_file}')
+            print(f' > Audio file bytes saved as {output_file}')
         else:
-            print(f'Error getting file url: {response.status_code}')
+            print(f' > Error getting file bytes: {response.status_code}')
             print(response.json())
     else:
-        print(f'Error: {response.status_code}')
+        print(f' > Error: {response.status_code}')
         print(response.json())
 
 except requests.exceptions.RequestException as e:
-    print(f'Request failed: {e}')
+    print(f' > Request failed: {e}')
