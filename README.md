@@ -41,7 +41,7 @@ python3 app.py
 
 ## Services
 
-### 1. Generate an audio file
+### 1. Generate speech
 
 **Method:** POST
 
@@ -61,7 +61,7 @@ python3 app.py
 - `accent(default: default language)` an accent for the voice
 
 
-### 2. Change voice
+### 2. Change voice of audio
 
 **Method:** POST
 
@@ -83,7 +83,54 @@ python3 app.py
 
 ## Examples
 
-Look inside examples folder
+```
+import requests, os
+
+SERVER_PORT = os.getenv("SERVER_PORT", 5000)
+
+output_file = 'outputs/generate_audio_url.wav'
+if os.path.exists(output_file):
+    os.remove(output_file)
+
+version = 'v2'
+
+# Define the URL of the generate_audio endpoint
+url = f'http://localhost:{SERVER_PORT}/{version}/generate-audio'
+
+# Define the parameters for the POST request
+payload = {
+    'model': 'en',
+    'input': 'Hello, this is a test. I am here, there and everywhere. Let me know how you feel, perhaps this can be real.',
+    'speed': 1.0,
+    'voice': 'elon',
+    'response_format': 'url',
+    #'style': 'excited' # v1 only
+    #'accent': 'en-au' #v2 only
+}
+
+try:
+    # Send the POST request to generate the audio
+    response = requests.post(url, json=payload, stream=False)
+    if response.status_code == 200:   
+        response_data = response.json()
+        file_url = response_data['result']['data']['url']
+        print(f'Generated url: {file_url}')
+        response = requests.get(file_url, stream=False)
+        if response.status_code == 200:
+            with open(output_file, 'wb') as audio_file:
+                audio_file.write(response.content)
+            print(f'Audio file saved as {output_file}')
+        else:
+            print(f'Error getting file url: {response.status_code}')
+            print(response.json())
+    else:
+        print(f'Error: {response.status_code}')
+        print(response.json())
+
+except requests.exceptions.RequestException as e:
+    print(f'Request failed: {e}')
+```
+Look inside examples folder for more examples
 
 ## Unit Testing
 
