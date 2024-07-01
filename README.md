@@ -39,17 +39,17 @@ pip install -r requirements.txt  # install dependencies
 python3 app.py
 ```
 
-## Servicesxxxx
+## Services
 
 ### Generate an audio file
 
 **Method:** POST
 
-** Endpoint:** http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}
+** Endpoint:** `http(s):://{SERVER_ADDRESS}:{SERVER_PORT}/generate-audio/{VERSION}`
 
 ** Params:**
-- model(required) the model to use
-- input(required) the text to convert to speech
+- `model`(required) the model to use
+- `input`(required) the text to convert to speech
 - speed(default: 1.0) the speed of the voice
 - response_format(url|bytes|base64|stream)(default: url) the response format
 - voice(default: raw) the voice to use
