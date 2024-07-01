@@ -50,7 +50,7 @@ python3 app.py
 ** Params:**
 - `model`(required) the model to use
 - `input`(required) the text to convert to speech
-- speed(default: 1.0) the speed of the voice
+- `speed(default: 1.0)` the speed of the voice
 - response_format(url|bytes|base64|stream)(default: url) the response format
 - voice(default: raw) the voice to use
 
