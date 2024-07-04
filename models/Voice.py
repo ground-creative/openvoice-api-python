@@ -23,7 +23,7 @@ class Voice:
         raw_lang = args['model']
         language = raw_lang.upper()
         text = args['input']
-        speed = args['speed']
+        speed = float(args['speed'])
         Voice.logger.debug(f' > Loading speaker v1 model for {language}...')
         source_se = torch.load(f'{Voice.ckpt_base[language]}/{raw_lang}_default_se.pth').to(device)
         Voice.logger.debug(f' > Converting text to audio...')
@@ -36,7 +36,7 @@ class Voice:
         raw_lang = args.get('model')
         language = raw_lang.upper()
         text = args.get('input')
-        speed = args.get('speed')
+        speed = float(args['speed'])
         default_speaker_key = list(Voice.speaker_ids[language].keys())[-1].lower()
         speaker_key = args.get('accent', default_speaker_key).lower()
         

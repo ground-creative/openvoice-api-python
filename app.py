@@ -68,6 +68,7 @@ def add_header(response):
     if hasattr(request, 'start_time'):
         elapsed_time = time() - request.start_time
         response.headers['X-Elapsed-Time'] = str(elapsed_time)
+        response.headers['Access-Control-Expose-Headers'] = 'X-Elapsed-Time'
     return response
     
 @app.teardown_request

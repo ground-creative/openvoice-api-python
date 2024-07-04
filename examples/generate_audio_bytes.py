@@ -24,7 +24,6 @@ payload = {
 try:
     # Send the POST request to generate the audio
     response = requests.post(url, json=payload)
-
     # Check if the request was successful
     if response.status_code == 200:
         # Save the received bytes as a .wav file

@@ -124,8 +124,6 @@ class Request:
         
             valid_generate_audio_params.append('accent')
 
-        
-
         invalid_params = [param for param in args if param not in valid_generate_audio_params]
                 
         if invalid_params:
