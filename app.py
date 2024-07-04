@@ -128,7 +128,17 @@ def log_teardown(exception=None):
 
 @app.route("/")
 async def home():
-    payload_response = ApiResponse.payload(True, 200, "OpenVoice API")
+    payload_response = ApiResponse.payload(
+        True,
+        200,
+        "OpenVoice API",
+        {
+            "device_v1": DEVICE_V1,
+            "device_v2": DEVICE_V2,
+            "models_v1": MODEL_LANGUAGES_V1,
+            "models_v2": MODEL_LANGUAGES_V2,
+        },
+    )
     return await ApiResponse.output(payload_response, 200)
 
 
